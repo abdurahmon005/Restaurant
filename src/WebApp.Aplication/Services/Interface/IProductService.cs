@@ -11,9 +11,8 @@ namespace WebApp.Aplication.Services.Interface
     public interface IProductService
     {
         Task<ResponseProductModel> CreateAsync( CreateProductModel model);
-        //Task<ResponseProductModel> CreateAsync(string bucketName, string objectName, Stream data, string contentType, CreateProductModel model);
         Task<ResponseProductModel> UpdateAsync(int id, UpdateProductModel model);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(DeleteProductModel model);
         Task<ResponseProductModel> GetByIdAsync(int id);
         Task<List<ResponseProductModel>> GetAllAsync();
 

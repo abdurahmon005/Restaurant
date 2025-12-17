@@ -30,7 +30,22 @@ namespace WebApp.DataAccess.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+         //   modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+
+             
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Customer)
+                .WithMany(u => u.CustomerOrders)
+                .HasForeignKey(o => o.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Waiter)
+                .WithMany(u => u.WaiterOrders)
+                .HasForeignKey(o => o.WaiterId)
+                .OnDelete(DeleteBehavior.Restrict);
+        
 
         }
     }

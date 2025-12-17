@@ -58,8 +58,10 @@ namespace WebAPI
             builder.Services.AddScoped<ITableService, TableService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IOtpService, OtpService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<PasswordHash>();
             builder.Services.AddScoped<JwtService>();
 
@@ -108,6 +110,13 @@ namespace WebAPI
             });
 
             var app = builder.Build();
+           
+
+            //builder.WebHost.UseUrls("http://0.0.0.0:5000"); // barcha IPlardan tinglash
+            //                                                 yoki aniq IP: builder.WebHost.UseUrls("http://10.30.1.236:5000");
+
+           
+            
 
 
             // Configure the HTTP request pipeline.

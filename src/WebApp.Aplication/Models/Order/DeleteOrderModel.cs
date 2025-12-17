@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApp.Aplication.Models.Categories
+namespace WebApp.Aplication.Models.Order
 {
-    public class CategoryResponceModel
+    public class DeleteOrderModel
     {
         public int Id { get; set; }
-        public string Name { get; set; }
     }
 }
