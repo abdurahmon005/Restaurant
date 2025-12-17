@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using WebApp.Aplication.Models.Tables;
 using WebApp.Aplication.Services.Interface;
 using WebApp.DataAccess.Persistence;
@@ -40,7 +33,7 @@ namespace WebApp.Aplication.Services.Impl
         public async Task<bool> Delete(int id)
         {
             var table = await _db.Tables.FindAsync(id);
-            if(table == null) return false;
+            if (table == null) return false;
 
             _db.Tables.Remove(table);
             await _db.SaveChangesAsync();
@@ -50,7 +43,7 @@ namespace WebApp.Aplication.Services.Impl
         public async Task<TableResponceModel> GetByIdAsync(int id)
         {
             var table = await _db.Tables.FindAsync(id);
-            if(table ==null) return null;
+            if (table == null) return null;
 
             return new TableResponceModel
             {
@@ -59,14 +52,18 @@ namespace WebApp.Aplication.Services.Impl
             };
         }
 
-        public async Task<IEnumerable<TableResponceModel>> GetTableAsync()
-        {
-            return await _db.Tables.Select(t => new TableResponceModel
-            {
-                Id = t.Id,
-                TableNumber = t.TableNumber
-            }).ToListAsync();
 
+        public async Task<TableResponceModel> GetTableAsync()
+        {
+            var tables = await _db.Tables
+                
+                .ToListAsync();
+
+            return tables.Select(p => new TableResponceModel
+            {
+                Id = p.Id,
+                TableNumber = p.TableNumber
+            }).FirstOrDefault();
         }
     }
 }

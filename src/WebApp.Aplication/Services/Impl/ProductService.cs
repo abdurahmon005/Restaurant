@@ -41,6 +41,8 @@ namespace WebApp.Aplication.Services.Impl
                     model.ImageUrl.ContentType
                 );
             }
+
+   
             var product = new Product
             {
                 Name = model.Name,
@@ -50,7 +52,7 @@ namespace WebApp.Aplication.Services.Impl
                 ImageUrl = imgUrl // URL saqlanadi
             };
 
-            _context.Add(product);
+            _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
             return new ResponseProductModel
@@ -124,12 +126,6 @@ namespace WebApp.Aplication.Services.Impl
             };
         }
 
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<ResponseProductModel>> GetAllAsync()
         {
             var products = await _context.Products
@@ -164,5 +160,22 @@ namespace WebApp.Aplication.Services.Impl
                 ImageUrl = product.ImageUrl
             };
         }
+
+        public async Task<bool> DeleteAsync(DeleteProductModel model)
+        {
+            var products = _context.Products.FindAsync(model.id);
+
+            if (products == null)
+            {
+                Console.WriteLine("не найдено");
+            }
+
+            _context.Products.Remove(products.Result);
+            _context.SaveChanges();
+
+            return true;
+        }
+
+       
     }
 }

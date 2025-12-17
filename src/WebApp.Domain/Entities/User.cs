@@ -18,6 +18,11 @@ namespace WebApp.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
         public bool IsVerified { get; set; }
+        
+        public ICollection<Order> CustomerOrders { get; set; }
+        public ICollection<Order> WaiterOrders { get; set; }
+
+
 
     }
 }

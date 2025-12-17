@@ -86,10 +86,7 @@ namespace WebApp.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("CustomerId1")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Status")
@@ -101,19 +98,16 @@ namespace WebApp.DataAccess.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("WaiterId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("WaiterId1")
+                    b.Property<Guid>("WaiterId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId1");
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("TableId");
 
-                    b.HasIndex("WaiterId1");
+                    b.HasIndex("WaiterId");
 
                     b.ToTable("Orders");
                 });
@@ -442,9 +436,9 @@ namespace WebApp.DataAccess.Migrations
             modelBuilder.Entity("WebApp.Domain.Entities.Order", b =>
                 {
                     b.HasOne("WebApp.Domain.Entities.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId1")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("CustomerOrders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WebApp.Domain.Entities.Table", "Table")
@@ -454,9 +448,9 @@ namespace WebApp.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("WebApp.Domain.Entities.User", "Waiter")
-                        .WithMany()
-                        .HasForeignKey("WaiterId1")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("WaiterOrders")
+                        .HasForeignKey("WaiterId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Customer");
@@ -620,6 +614,13 @@ namespace WebApp.DataAccess.Migrations
             modelBuilder.Entity("WebApp.Domain.Entities.RolePermission", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("WebApp.Domain.Entities.User", b =>
+                {
+                    b.Navigation("CustomerOrders");
+
+                    b.Navigation("WaiterOrders");
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.UserOtps", b =>

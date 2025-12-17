@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace WebApp.Aplication.Models.Categories
 {
-    public class CategoryResponceModel
+    public class CategoryDeleteModel
     {
         public int Id { get; set; }
-        public string Name { get; set; }
     }
 }

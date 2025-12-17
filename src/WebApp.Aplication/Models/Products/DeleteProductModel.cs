@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApp.Domain.Enums
+namespace WebApp.Aplication.Models.Products
 {
-    public enum StatusType
+    public class DeleteProductModel
     {
-        Closed = 1,
-        Active = 2,
+        public int id { get; set; }
+        
     }
 }
+

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WebApp.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class One : Migration
+    public partial class uuid3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -195,13 +195,11 @@ namespace WebApp.DataAccess.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TableId = table.Column<int>(type: "integer", nullable: false),
-                    CustomerId = table.Column<int>(type: "integer", nullable: false),
-                    WaiterId = table.Column<int>(type: "integer", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    WaiterId = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     TotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CustomerId1 = table.Column<Guid>(type: "uuid", nullable: false),
-                    WaiterId1 = table.Column<Guid>(type: "uuid", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -213,17 +211,17 @@ namespace WebApp.DataAccess.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Orders_Users_CustomerId1",
-                        column: x => x.CustomerId1,
+                        name: "FK_Orders_Users_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Orders_Users_WaiterId1",
-                        column: x => x.WaiterId1,
+                        name: "FK_Orders_Users_WaiterId",
+                        column: x => x.WaiterId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -340,9 +338,9 @@ namespace WebApp.DataAccess.Migrations
                 column: "CustomersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_CustomerId1",
+                name: "IX_Orders_CustomerId",
                 table: "Orders",
-                column: "CustomerId1");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_TableId",
@@ -350,9 +348,9 @@ namespace WebApp.DataAccess.Migrations
                 column: "TableId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_WaiterId1",
+                name: "IX_Orders_WaiterId",
                 table: "Orders",
-                column: "WaiterId1");
+                column: "WaiterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrdersDetails_OrderId",
