@@ -9,11 +9,8 @@ namespace WebApp.Aplication.Models.Users
 {
     public class UserListResponceModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string UserName { get; set; }
         public RoleType Role {  get; set; }
-
-
-
     }
 }

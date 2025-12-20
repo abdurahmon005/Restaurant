@@ -13,7 +13,6 @@ namespace WebApp.Aplication.Models.Order
         public decimal TotalPrice { get; set; }
         public StatusType Status { get; set; }
         public int TableId { get; set; }
-        public int CustomerId { get; set; }
-        public int WaiterId { get; set; }
+        public Guid CustomerId { get; set; }
     }
 }

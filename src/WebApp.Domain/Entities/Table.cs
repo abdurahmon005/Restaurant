@@ -11,5 +11,7 @@ namespace WebApp.Domain.Entities
         public int Id { get; set; }
         public int TableNumber { get; set; }
 
+        public List<Order> Order { get; set; }  
+
     }
 }

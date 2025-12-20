@@ -14,6 +14,5 @@ namespace WebApp.Aplication.Models.Order
         public StatusType Status { get; set ; }
         public int TableId { get; set; }
         public Guid CustomerId { get; set; }
-        public Guid WaiterId { get; set; }
     }
 }

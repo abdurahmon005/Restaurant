@@ -30,23 +30,39 @@ namespace WebApp.DataAccess.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-         //   modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+            base.OnModelCreating(modelBuilder);
 
-             
+            // ==========================
+            // Order ↔ User bog‘lanishi
+            // ==========================
             modelBuilder.Entity<Order>()
-                .HasOne(o => o.Customer)
-                .WithMany(u => u.CustomerOrders)
-                .HasForeignKey(o => o.CustomerId)
+                .HasOne(o => o.User)          // Order.User navigation
+                .WithMany(u => u.orders)      // User.Orders collection
+                .HasForeignKey(o => o.UserId) // Order.UserId → User.Id
+                .OnDelete(DeleteBehavior.Restrict); // o‘chirganda Order’ga ta’sir qilinmasin
+
+            // ==========================
+            // Boshqa entitylar ham shu tarzda sozlanadi
+            // ==========================
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Table)
+                .WithMany(t => t.Order)
+                .HasForeignKey(o => o.TableId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.Waiter)
-                .WithMany(u => u.WaiterOrders)
-                .HasForeignKey(o => o.WaiterId)
-                .OnDelete(DeleteBehavior.Restrict);
-        
+            // UserRole ↔ User
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId);
 
+            // UserRole ↔ Role
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId);
         }
     }
 }

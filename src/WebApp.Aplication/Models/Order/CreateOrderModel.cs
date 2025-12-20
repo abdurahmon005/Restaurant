@@ -14,10 +14,11 @@ namespace WebApp.Aplication.Models.Order
 {
     public class CreateOrderModel
     {
-        public int Id { get; set; }
-        public decimal TotalAmount { get; set; }
+        public int TableId { get; set; }
         public StatusType Status { get; set; }
-        [JsonIgnore]
-        public virtual User Customer { get; set; }
+        public decimal TotalAmount { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public int UserId { get; set; }
+
     }
 }

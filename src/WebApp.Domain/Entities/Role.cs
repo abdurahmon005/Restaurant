@@ -10,8 +10,8 @@ namespace WebApp.Domain.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
-        public List<UserRole> UseerRoles { get; set; } = new List<UserRole>();
+        public string Description { get; set; }
+        public List<UserRole> UserRoles { get; set; } 
         public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
 
     }

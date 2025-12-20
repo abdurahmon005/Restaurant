@@ -14,7 +14,7 @@ namespace WebApp.Domain.Entities
         public int AccountId { get; set; }
         public TransactionType TransactionType { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public virtual Payment Payment { get; set; } = null!;
-        public virtual Account Account { get; set; } = null!;
+        public  Payment Payment { get; set; } = null!;
+        public  Account Account { get; set; } = null!;
     }
 }

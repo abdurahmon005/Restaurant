@@ -15,7 +15,7 @@ namespace RestaurantProject.API.Controllers
         {
             _userService = userService;
         }
-        [HttpPost]
+        [HttpPost("Create")]
         public IActionResult PostUser(CreateUserModel usercreate)
         {
             var id = _userService.Create(usercreate);
@@ -24,15 +24,15 @@ namespace RestaurantProject.API.Controllers
         }
 
         [Authorize(Roles = "Waiter")]
-        [HttpPost("get-all")]
+        [HttpPost("Get-All")]
         public IActionResult GetAll([FromBody] PaginationOption paginationoption)
         {
             var result = _userService.GetAll(paginationoption);
 
             return Ok(result);
         }
-        [HttpGet("{id:Guid}")]
-        public IActionResult GetById([FromBody] Guid id)
+        [HttpGet("Get by {id:Guid}")]
+        public IActionResult GetById(int id)
         {
             var result = _userService.GetUser(id);
 

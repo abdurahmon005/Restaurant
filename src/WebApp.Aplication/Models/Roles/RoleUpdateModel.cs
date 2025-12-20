@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebApp.Aplication.Models.Roles
 {
-    public class RoleCreateModel
+    public class RoleUpdateModel
     {
         public string Name { get; set; }
         public string Description { get; set; }
-
-
     }
 }

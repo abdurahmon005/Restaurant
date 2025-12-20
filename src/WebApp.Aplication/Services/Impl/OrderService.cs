@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebApp.Aplication.Models;
 using WebApp.Aplication.Models.Categories;
 using WebApp.Aplication.Models.Order;
 using WebApp.Aplication.Models.Products;
@@ -22,12 +23,14 @@ namespace WebApp.Aplication.Services.Impl
             _appDbContext = context;
         }
 
-        public async Task<ResponseOrderModel> CreateAsync(CreateOrderModel model)
+        public async Task<ApiResult<string>> CreateAsync(CreateOrderModel model)
         {
+
             var order = new Order
             {
-                CustomerId = model.Customer.Id,   
                 TotalAmount = model.TotalAmount,
+                UserId = model.UserId,
+                TableId = model.TableId,
                 Status = model.Status,
                 CreatedAt = DateTime.UtcNow
             };
@@ -35,12 +38,7 @@ namespace WebApp.Aplication.Services.Impl
             await _appDbContext.Orders.AddAsync(order);
             await _appDbContext.SaveChangesAsync();
 
-            return new ResponseOrderModel
-            {
-                Id = order.Id,
-                Status = order.Status,
-                TotalPrice = order.TotalAmount
-            };
+            return ApiResult<string>.Success("yaratildi");
         }
 
         public async Task<bool> DeleteAsync(DeleteOrderModel model)

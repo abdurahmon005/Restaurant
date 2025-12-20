@@ -62,6 +62,10 @@ namespace WebAPI
             builder.Services.AddScoped<IOtpService, OtpService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+
+
             builder.Services.AddScoped<PasswordHash>();
             builder.Services.AddScoped<JwtService>();
 

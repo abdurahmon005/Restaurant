@@ -8,8 +8,8 @@ namespace WebApp.Domain.Entities
 {
     public class UserOtps
     {
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public int Id { get; set; }
+        public int UserId { get; set; }
         public string Code { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? ExpiredAt { get; set; }
