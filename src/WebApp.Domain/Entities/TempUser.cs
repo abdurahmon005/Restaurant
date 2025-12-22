@@ -9,7 +9,7 @@ namespace WebApp.Domain.Entities
 {
     public class TempUser
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public int TelegramId { get; set; }
         public string PhoneNumber { get; set; }
         public string OtpCode { get; set; }

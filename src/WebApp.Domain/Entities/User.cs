@@ -9,7 +9,7 @@ namespace WebApp.Domain.Entities
 {
     public class User
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string UserName { get; set; }
         public string PhoneNumber { get; set; }
         public RoleType Role { get; set; }
@@ -18,16 +18,12 @@ namespace WebApp.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
         public bool IsVerified { get; set; }
-        
-        public ICollection<Order> CustomerOrders { get; set; }
-        public ICollection<Order> WaiterOrders { get; set; }
+
+        public List<UserRole> UserRoles { get; set; }   
+        public List<Order> orders { get; set; }
+        public List<Order> WaiterOrders { get; set; }
 
 
 
     }
 }
-
-      //  public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-
-        //public ICollection<Order> OrdersTaken { get; set; } = new List<Order>();
-        //public ICollection<Order> OrdersPlaced { get; set; } = new List<Order>();

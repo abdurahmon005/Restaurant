@@ -40,6 +40,7 @@ namespace WebApp.Aplication.Services.Impl
 
             return true;
         }
+
         public async Task<TableResponceModel> GetByIdAsync(int id)
         {
             var table = await _db.Tables.FindAsync(id);
@@ -51,7 +52,6 @@ namespace WebApp.Aplication.Services.Impl
                 TableNumber = table.TableNumber
             };
         }
-
 
         public async Task<TableResponceModel> GetTableAsync()
         {

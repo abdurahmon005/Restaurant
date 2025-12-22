@@ -18,6 +18,6 @@ public class Payment
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public virtual Order Order { get; set; }
+    public  Order Order { get; set; }
     public ICollection<Transaction> Transactions { get; set; }
 }

@@ -21,7 +21,7 @@ namespace WebApp.Aplication.Services.Impl
             _emailService = emailService;
         }
 
-        public async  Task<string> GenerateAndSaveOtpAsync(Guid userId)
+        public async Task<string> GenerateAndSaveOtpAsync(int userId)
         {
 
             var user = await _context.Users.FindAsync(userId);
@@ -46,7 +46,7 @@ namespace WebApp.Aplication.Services.Impl
         }
 
 
-        public async Task<UserOtps?> GetLatestOtpAsync(Guid userId, string code)
+        public async Task<UserOtps?> GetLatestOtpAsync(int userId, string code)
         {
             return await _context.UserOtps
             .Where(o => o.UserId == userId && o.Code == code && o.ExpiredAt > DateTime.Now)

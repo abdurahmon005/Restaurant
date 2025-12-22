@@ -9,7 +9,7 @@ namespace WebApp.Aplication.Services.Interface
 {
     public interface  IOtpService
     {
-        Task<string> GenerateAndSaveOtpAsync(Guid userId);
-        Task<UserOtps?> GetLatestOtpAsync(Guid userId, string code);
+        Task<string> GenerateAndSaveOtpAsync(int userId);
+        Task<UserOtps?> GetLatestOtpAsync(int userId, string code);
     }
 }

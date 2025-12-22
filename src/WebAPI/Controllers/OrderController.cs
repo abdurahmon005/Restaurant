@@ -22,9 +22,9 @@ using WebApp.Aplication.Services.Interface;
 
         if (result == null)
         {
-            return BadRequest(ApiResult<ResponseOrderModel>.Failure);
+            return BadRequest(result);
         }
-            return Ok(ApiResult<ResponseOrderModel>.Success(result));
+            return Ok(result);
         }
 
         [HttpGet("Get All Orders")]

@@ -15,6 +15,8 @@ namespace RestaurantProject.API.Controllers
         {
             _tableService = tableService;
         }
+
+
         [HttpPost("Create")]
         public async Task<IActionResult> CreateTable(TableCreateModel model)
         {
@@ -22,6 +24,8 @@ namespace RestaurantProject.API.Controllers
 
             return Ok("Table Created");
         }
+
+
         [HttpGet("Get All")]
         public async Task<IActionResult> GetAllTables()
         {
@@ -31,7 +35,7 @@ namespace RestaurantProject.API.Controllers
 
 
         [HttpGet("Get by Id")]
-        public async Task<IActionResult> GetTablesById(int id, [FromQuery] TableResponceModel model) {
+        public async Task<IActionResult> GetTablesById(int id) {
             
             var table = await _tableService.GetByIdAsync(id);
             if (table == null)
@@ -41,6 +45,8 @@ namespace RestaurantProject.API.Controllers
             return Ok(table);
             
         }
+
+
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteTable(int id)
         {

@@ -19,7 +19,7 @@ namespace WebApp.Aplication.Services.Impl
         private readonly AppDbContext _context;
         public readonly JwtService _jwtService;
         public readonly PasswordHash _passwordHash;
-       // public readonly IEmailService _emailService;
+        public readonly IEmailService _emailService;
         public readonly IOtpService _otpService;
 
         public UserService(AppDbContext context, JwtService jwtService, PasswordHash passwordHash, IEmailService emailService,IOtpService otpService)       
@@ -31,7 +31,7 @@ namespace WebApp.Aplication.Services.Impl
             _otpService = otpService;
         }
 
-        public Guid Create(CreateUserModel createUserModel)
+        public int Create(CreateUserModel createUserModel)
         {
             string salt = Guid.NewGuid().ToString();
             string HashPass = _passwordHash.Encrypt(createUserModel.Password, salt);
@@ -48,7 +48,7 @@ namespace WebApp.Aplication.Services.Impl
             _context.Users.Add(result);
             _context.SaveChanges();
 
-            return result.Id;
+            return result.Id ;
         }
 
         public PaginationResult<UserListResponceModel> GetAll(PaginationOption model)
@@ -81,22 +81,22 @@ namespace WebApp.Aplication.Services.Impl
             
             };
         }
-        public UserResponseModel GetUser(Guid id)
+        public UserResponseModel GetUser(int id)
         {
-            UserResponseModel? User = _context.Users
-                .Where(s => s.Id == id)
-                .Select(s => new UserResponseModel
+            var user = _context.Users.Where(u => u.Id == id)
+                .Select(u => new UserResponseModel
                 {
-                    Id = s.Id,
-                    UserName = s.UserName
+                    Id = u.Id,
+                     UserName = u.UserName
                 })
                 .FirstOrDefault();
 
-            if(User == null)
+            if (user == null)
             {
-                throw new NotImplementedException();
+                throw new Exception("User not found");
             }
-                return User;
+
+            return user;
         }
 
         public LoginResponceModel LoginAsync(LoginUserModel loginUserModel)
@@ -136,6 +136,7 @@ namespace WebApp.Aplication.Services.Impl
 
              
         }
+
         public async Task<ApiResult<string>> RegisterAsync(string fullname, string phoneNumber, string password, bool isAdminSite)
         {
             var exUser = await _context.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);

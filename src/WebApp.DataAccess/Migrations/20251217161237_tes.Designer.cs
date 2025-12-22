@@ -12,8 +12,8 @@ using WebApp.DataAccess.Persistence;
 namespace WebApp.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251215165059_uuid3")]
-    partial class uuid3
+    [Migration("20251217161237_tes")]
+    partial class tes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,8 +42,8 @@ namespace WebApp.DataAccess.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("CustomersId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("CustomersId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("Updated_at")
                         .HasColumnType("timestamp with time zone");
@@ -89,9 +89,6 @@ namespace WebApp.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
@@ -101,16 +98,19 @@ namespace WebApp.DataAccess.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
-                    b.Property<Guid>("WaiterId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
                     b.HasIndex("TableId");
 
-                    b.HasIndex("WaiterId");
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Orders");
                 });
@@ -331,9 +331,11 @@ namespace WebApp.DataAccess.Migrations
 
             modelBuilder.Entity("WebApp.Domain.Entities.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -375,9 +377,11 @@ namespace WebApp.DataAccess.Migrations
 
             modelBuilder.Entity("WebApp.Domain.Entities.UserOtps", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -392,11 +396,11 @@ namespace WebApp.DataAccess.Migrations
                     b.Property<bool>("Used")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid?>("UserOtpsId")
-                        .HasColumnType("uuid");
+                    b.Property<int?>("UserOtpsId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -409,18 +413,23 @@ namespace WebApp.DataAccess.Migrations
 
             modelBuilder.Entity("WebApp.Domain.Entities.UserRole", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("id");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
                 });
@@ -438,29 +447,25 @@ namespace WebApp.DataAccess.Migrations
 
             modelBuilder.Entity("WebApp.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("WebApp.Domain.Entities.User", "Customer")
-                        .WithMany("CustomerOrders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("WebApp.Domain.Entities.Table", "Table")
-                        .WithMany()
+                        .WithMany("Order")
                         .HasForeignKey("TableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApp.Domain.Entities.User", "Waiter")
-                        .WithMany("WaiterOrders")
-                        .HasForeignKey("WaiterId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.HasOne("WebApp.Domain.Entities.User", "User")
+                        .WithMany("orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WebApp.Domain.Entities.User", null)
+                        .WithMany("WaiterOrders")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Table");
 
-                    b.Navigation("Waiter");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.OrderDetails", b =>
@@ -567,12 +572,20 @@ namespace WebApp.DataAccess.Migrations
             modelBuilder.Entity("WebApp.Domain.Entities.UserRole", b =>
                 {
                     b.HasOne("WebApp.Domain.Entities.Role", "Role")
-                        .WithMany("UseerRoles")
+                        .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("WebApp.Domain.Entities.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.Account", b =>
@@ -611,7 +624,7 @@ namespace WebApp.DataAccess.Migrations
                 {
                     b.Navigation("RolePermissions");
 
-                    b.Navigation("UseerRoles");
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.RolePermission", b =>
@@ -619,11 +632,18 @@ namespace WebApp.DataAccess.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("WebApp.Domain.Entities.Table", b =>
+                {
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("WebApp.Domain.Entities.User", b =>
                 {
-                    b.Navigation("CustomerOrders");
+                    b.Navigation("UserRoles");
 
                     b.Navigation("WaiterOrders");
+
+                    b.Navigation("orders");
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.UserOtps", b =>
