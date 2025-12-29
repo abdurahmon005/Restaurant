@@ -1,8 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebApp.Domain.Enums;
 
 namespace WebApp.Domain.Entities
@@ -11,19 +8,20 @@ namespace WebApp.Domain.Entities
     {
         public int Id { get; set; }
 
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
         public StatusType Status { get; set; }
-        public decimal TotalAmount { get; set; }    
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public decimal TotalAmount { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string? Notes { get; set; }
+        public string? WaiterName { get; set; }
 
-
-        public Table Table { get; set; }
+        public Table Table { get; set; } = null!;
         public int UserId { get; set; }
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
         public int TableId { get; set; }
 
-        public  List<OrderDetails> OrderDetails { get; set; }
-        public  List<Payment> Payments { get; set; }
-
+        public List<OrderDetails> OrderDetails { get; set; } = new();
+        public List<Payment> Payments { get; set; } = new();
     }
 }

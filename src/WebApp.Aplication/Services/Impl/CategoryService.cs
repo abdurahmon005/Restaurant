@@ -27,24 +27,24 @@ namespace WebApp.Aplication.Services.Impl
                  Name = model.Name,
             };
 
-            _appDbContext.Categories.AddAsync(category);
+            await _appDbContext.Categories.AddAsync(category);
             await _appDbContext.SaveChangesAsync();
             return new CategoryResponceModel
             {
+                Id = category.Id,
                 Name = model.Name,
             };
         }
 
-        public async Task<CategoryResponceModel> GetAllAsync()
+        public async Task<List<CategoryResponceModel>> GetAllAsync()
         {
-            var categories = await _appDbContext.Categories
-        .ToListAsync();
+            var categories = await _appDbContext.Categories.ToListAsync();
 
             return categories.Select(p => new CategoryResponceModel
             {
                 Id = p.Id,
                 Name = p.Name
-            }).FirstOrDefault();
+            }).ToList();
         }
 
         public async Task<CategoryResponceModel> UpdateAsync(int id, CategoryUpdateModel model)
@@ -69,15 +69,15 @@ namespace WebApp.Aplication.Services.Impl
 
         public async Task<bool> DeleteAsync(CategoryDeleteModel model)
         {
-            var categories = _appDbContext.Categories.FindAsync(model.Id);
+            var category = await _appDbContext.Categories.FindAsync(model.Id);
 
-            if (categories == null)
+            if (category == null)
             {
-                Console.WriteLine("не найдено");
+                return false;
             }
 
-            _appDbContext.Categories.Remove(categories.Result);
-            _appDbContext.SaveChanges();
+            _appDbContext.Categories.Remove(category);
+            await _appDbContext.SaveChangesAsync();
 
             return true;
         }

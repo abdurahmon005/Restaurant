@@ -26,6 +26,8 @@ namespace WebApp.DataAccess.Persistence
         public DbSet<Product> Products { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<TempUser> TempUsers { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -53,10 +55,10 @@ namespace WebApp.DataAccess.Persistence
                 .OnDelete(DeleteBehavior.Restrict);
 
             // UserRole ↔ User
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.User)
-                .WithMany(u => u.UserRoles)
-                .HasForeignKey(ur => ur.UserId);
+            //modelBuilder.Entity<UserRole>()
+            //    .HasOne(ur => ur.User)
+            //    .WithMany(u => u.UserRoles)
+            //    .HasForeignKey(ur => ur.UserId);
 
             // UserRole ↔ Role
             modelBuilder.Entity<UserRole>()

@@ -86,6 +86,12 @@ namespace WebApp.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Notes")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
@@ -100,6 +106,9 @@ namespace WebApp.DataAccess.Migrations
 
                     b.Property<int?>("UserId1")
                         .HasColumnType("integer");
+
+                    b.Property<string>("WaiterName")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -241,6 +250,46 @@ namespace WebApp.DataAccess.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("WebApp.Domain.Entities.Reservation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CustomerPhone")
+                        .HasColumnType("text");
+
+                    b.Property<int>("GuestCount")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ReservationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TableId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TableId");
+
+                    b.ToTable("Reservations");
+                });
+
             modelBuilder.Entity("WebApp.Domain.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -293,12 +342,55 @@ namespace WebApp.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Section")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<int>("TableNumber")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.ToTable("Tables");
+                });
+
+            modelBuilder.Entity("WebApp.Domain.Entities.TempUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpireDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("IsActive")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("OtpCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TelegramId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TempUsers");
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.Transaction", b =>
@@ -341,6 +433,10 @@ namespace WebApp.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsVerified")
                         .HasColumnType("boolean");
 
@@ -352,8 +448,9 @@ namespace WebApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int?>("RolePermissionId")
                         .HasColumnType("integer");
@@ -510,6 +607,17 @@ namespace WebApp.DataAccess.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("WebApp.Domain.Entities.Reservation", b =>
+                {
+                    b.HasOne("WebApp.Domain.Entities.Table", "Table")
+                        .WithMany("Reservations")
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Table");
+                });
+
             modelBuilder.Entity("WebApp.Domain.Entities.RolePermission", b =>
                 {
                     b.HasOne("WebApp.Domain.Entities.Permission", "Permission")
@@ -636,6 +744,8 @@ namespace WebApp.DataAccess.Migrations
             modelBuilder.Entity("WebApp.Domain.Entities.Table", b =>
                 {
                     b.Navigation("Order");
+
+                    b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.User", b =>

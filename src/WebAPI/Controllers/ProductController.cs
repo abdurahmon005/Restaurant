@@ -17,23 +17,28 @@ namespace RestaurantApp.API.Controllers
             _productService = productService;
         }
 
-        [HttpPost("Create Products")]
+        [HttpPost]
         public async Task<ActionResult<ResponseProductModel>> Create([FromForm] CreateProductModel dto)
         {
-            var result = await _productService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            try
+            {
+                var result = await _productService.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        [HttpPut("Update Products{id}")]
+        [HttpPut("{id}")]
         public async Task<ActionResult<ResponseProductModel>> Update(int id, [FromForm] UpdateProductModel dto)
         {
             var result = await _productService.UpdateAsync(id, dto);
             return Ok(result);
         }
 
-       
-
-        [HttpGet("Get Products{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ResponseProductModel>> GetById(int id)
         {
             var result = await _productService.GetByIdAsync(id);
@@ -43,14 +48,14 @@ namespace RestaurantApp.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Get All")]
+        [HttpGet]
         public async Task<ActionResult<List<ResponseProductModel>>> GetAll()
         {
             var result = await _productService.GetAllAsync();
             return Ok(result);
         }
 
-        [HttpGet("Get by Category/{categoryId}")]
+        [HttpGet("by-category/{categoryId}")]
         public async Task<ActionResult<List<ResponseProductModel>>> GetByCategory(int categoryId)
         {
             var result = await _productService.GetByIdAsync(categoryId);
@@ -58,13 +63,18 @@ namespace RestaurantApp.API.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("Delete products")]
-
-        public async Task<ActionResult<CategoryResponceModel>>Delete([FromQuery] DeleteProductModel dto)
+        [HttpDelete]
+        public async Task<ActionResult<CategoryResponceModel>> Delete([FromQuery] DeleteProductModel dto)
         {
-            var result = await _productService.DeleteAsync(dto);
-
-            return Ok(result);
+            try
+            {
+                var result = await _productService.DeleteAsync(dto);
+                return Ok(new { success = result, message = result ? "O'chirildi" : "Topilmadi" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

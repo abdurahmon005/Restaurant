@@ -13,7 +13,7 @@ namespace WebApp.Aplication.Services.Interface
         Task<CategoryResponceModel> CreateCategory(CategoryCreateModel model);
         Task<CategoryResponceModel> UpdateAsync(int id, CategoryUpdateModel model);
 
-        Task<CategoryResponceModel> GetAllAsync();
+        Task<List<CategoryResponceModel>> GetAllAsync();
         Task<bool> DeleteAsync(CategoryDeleteModel model);    
     }
 }

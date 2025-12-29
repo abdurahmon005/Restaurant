@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApp.Aplication.Models.Roles
+namespace WebApp.Aplication.Models.Users
 {
-    public class RoleDeleteModel
+    public class ResponceUserModel
     {
-        public int Id { get; set; }
+
     }
 }

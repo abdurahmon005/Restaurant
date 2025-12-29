@@ -25,6 +25,13 @@ namespace WebApp.Aplication.Services.Impl
 
         public async Task<ResponseProductModel> CreateAsync(CreateProductModel model)
         {
+            // Kategoriyani tekshirish
+            var categoryExists = await _context.Categories.AnyAsync(c => c.Id == model.CategoryId);
+            if (!categoryExists)
+            {
+                throw new Exception($"Category with ID {model.CategoryId} not found");
+            }
+
             string imgUrl = null;
             if (model.ImageUrl != null && model.ImageUrl.Length > 0)
             {
@@ -42,7 +49,7 @@ namespace WebApp.Aplication.Services.Impl
                 );
             }
 
-   
+
             var product = new Product
             {
                 Name = model.Name,
@@ -52,7 +59,7 @@ namespace WebApp.Aplication.Services.Impl
                 ImageUrl = imgUrl // URL saqlanadi
             };
 
-            _context.Products.AddAsync(product);
+            await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
             return new ResponseProductModel
@@ -163,15 +170,15 @@ namespace WebApp.Aplication.Services.Impl
 
         public async Task<bool> DeleteAsync(DeleteProductModel model)
         {
-            var products = _context.Products.FindAsync(model.id);
+            var product = await _context.Products.FindAsync(model.id);
 
-            if (products == null)
+            if (product == null)
             {
-                Console.WriteLine("не найдено");
+                return false;
             }
 
-            _context.Products.Remove(products.Result);
-            _context.SaveChanges();
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
 
             return true;
         }

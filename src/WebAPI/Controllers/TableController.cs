@@ -20,17 +20,27 @@ namespace RestaurantProject.API.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> CreateTable(TableCreateModel model)
         {
-            var table = await _tableService.CreateTableAsync(model);
-
-            return Ok("Table Created");
+            try
+            {
+                var table = await _tableService.CreateTableAsync(model);
+                return Ok(table);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Xatolik yuz berdi: " + ex.Message });
+            }
         }
 
 
         [HttpGet("Get All")]
         public async Task<IActionResult> GetAllTables()
         {
-            var table = await _tableService.GetTableAsync();
-            return Ok(table);
+            var tables = await _tableService.GetAllTablesAsync();
+            return Ok(tables);
         }
 
 

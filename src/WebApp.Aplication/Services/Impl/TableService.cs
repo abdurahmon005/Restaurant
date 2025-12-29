@@ -16,17 +16,31 @@ namespace WebApp.Aplication.Services.Impl
 
         public async Task<TableResponceModel> CreateTableAsync(TableCreateModel model)
         {
+            var exists = await _db.Tables
+                .AnyAsync(t => t.TableNumber == model.TableNumber);
+
+            if (exists)
+            {
+                throw new ArgumentException($"Table with number {model.TableNumber} already exists");
+            }
+
             var table = new Table
             {
-                TableNumber = model.TableNumber
+                TableNumber = model.TableNumber,
+                Capacity = model.Capacity,
+                Section = model.Section
             };
+
             await _db.Tables.AddAsync(table);
             await _db.SaveChangesAsync();
 
             return new TableResponceModel
             {
                 Id = table.Id,
-                TableNumber = table.TableNumber
+                TableNumber = table.TableNumber,
+                Capacity = table.Capacity,
+                Status = table.Status.ToString().ToLower(),
+                Section = table.Section
             };
         }
 
@@ -41,7 +55,7 @@ namespace WebApp.Aplication.Services.Impl
             return true;
         }
 
-        public async Task<TableResponceModel> GetByIdAsync(int id)
+        public async Task<TableResponceModel?> GetByIdAsync(int id)
         {
             var table = await _db.Tables.FindAsync(id);
             if (table == null) return null;
@@ -49,21 +63,25 @@ namespace WebApp.Aplication.Services.Impl
             return new TableResponceModel
             {
                 Id = table.Id,
-                TableNumber = table.TableNumber
+                TableNumber = table.TableNumber,
+                Capacity = table.Capacity,
+                Status = table.Status.ToString().ToLower(),
+                Section = table.Section
             };
         }
 
-        public async Task<TableResponceModel> GetTableAsync()
+        public async Task<List<TableResponceModel>> GetAllTablesAsync()
         {
-            var tables = await _db.Tables
-                
-                .ToListAsync();
+            var tables = await _db.Tables.ToListAsync();
 
             return tables.Select(p => new TableResponceModel
             {
                 Id = p.Id,
-                TableNumber = p.TableNumber
-            }).FirstOrDefault();
+                TableNumber = p.TableNumber,
+                Capacity = p.Capacity,
+                Status = p.Status.ToString().ToLower(),
+                Section = p.Section
+            }).ToList();
         }
     }
 }
