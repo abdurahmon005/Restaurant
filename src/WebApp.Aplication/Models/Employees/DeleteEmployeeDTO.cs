@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApp.Domain.Enums
+namespace WebApp.Aplication.Models.Employees
 {
-    public enum RoleType
+    public class DeleteEmployeeDTO
     {
-        Admin = 1,
-        Waiter = 2
+        public int Id { get; set; }
     }
 }

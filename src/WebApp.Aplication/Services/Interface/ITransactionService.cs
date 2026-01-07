@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApp.Domain.Enums
+namespace WebApp.Aplication.Services.Interface
 {
-    public enum RoleType
+    public interface ITransactionService
     {
-        Admin = 1,
-        Waiter = 2
     }
 }

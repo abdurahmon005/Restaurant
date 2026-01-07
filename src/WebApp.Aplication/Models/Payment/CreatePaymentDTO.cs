@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApp.Domain.Enums
+namespace WebApp.Aplication.Models.Payment
 {
-    public enum RoleType
+    public class CreatePaymentDTO
     {
-        Admin = 1,
-        Waiter = 2
+
     }
 }

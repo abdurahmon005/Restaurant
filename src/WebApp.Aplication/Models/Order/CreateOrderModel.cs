@@ -15,10 +15,16 @@ namespace WebApp.Aplication.Models.Order
     public class CreateOrderModel
     {
         public int TableId { get; set; }
-        public StatusType Status { get; set; }
+        public StatusType Status { get; set; } = StatusType.Active;
         public decimal TotalAmount { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public int UserId { get; set; }
+        public List<CreateOrderItemModel> Items { get; set; } = new();
+    }
 
+    public class CreateOrderItemModel
+    {
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
     }
 }

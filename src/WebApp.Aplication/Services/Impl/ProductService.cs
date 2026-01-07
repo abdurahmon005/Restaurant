@@ -153,7 +153,8 @@ namespace WebApp.Aplication.Services.Impl
         public async Task<ResponseProductModel> GetByIdAsync(int id)
         {
             var product = await _context.Products
-            .Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
          if (product == null) return null;
 
