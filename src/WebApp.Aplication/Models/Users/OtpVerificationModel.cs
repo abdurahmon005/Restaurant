@@ -8,7 +8,7 @@ namespace WebApp.Aplication.Models.Users
 {
     public class OtpVerificationModel
     {
-        public string PhoneNumber { get; set; }
-        public string Code { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
     }
 }

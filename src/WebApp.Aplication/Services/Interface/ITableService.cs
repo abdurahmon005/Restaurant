@@ -10,8 +10,9 @@ namespace WebApp.Aplication.Services.Interface
     public interface ITableService
     {
         public Task<TableResponceModel> CreateTableAsync(TableCreateModel model);
-        public Task<TableResponceModel> GetTableAsync();
-        public Task<TableResponceModel> GetByIdAsync(int id);
+        public Task<List<TableResponceModel>> GetAllTablesAsync();
+        public Task<TableResponceModel?> GetByIdAsync(int id);
         public Task<bool> Delete(int id);
+        public Task<TableResponceModel?> UpdateAsync(int id, TableCreateModel model);
     }
 }

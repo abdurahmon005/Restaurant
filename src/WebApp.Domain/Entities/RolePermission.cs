@@ -13,7 +13,6 @@ namespace WebApp.Domain.Entities
         public int PermissionId { get; set; }
         public Role Role { get; set; } = null!;
         public Permission Permission { get; set; } = null!;
-
         public ICollection<User> Users { get; set; } = new List<User>();
     }
 }

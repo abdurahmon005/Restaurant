@@ -1,8 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WebApp.Domain.Enums;
 
 namespace WebApp.Domain.Entities
 {
@@ -10,8 +8,11 @@ namespace WebApp.Domain.Entities
     {
         public int Id { get; set; }
         public int TableNumber { get; set; }
+        public int Capacity { get; set; } = 4;
+        public TableStatus Status { get; set; } = TableStatus.Available;
+        public string Section { get; set; } = "Asosiy zal";
 
-        public List<Order> Order { get; set; }  
-
+        public List<Order> Order { get; set; } = new();
+        public List<Reservation> Reservations { get; set; } = new();
     }
 }

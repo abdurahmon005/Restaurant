@@ -6,17 +6,18 @@ using WebApp.Aplication.Services.Interface;
 
 namespace RestaurantApp.API.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
-    public class CategoryController : ControllerBase 
+    public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-       public CategoryController(ICategoryService categoryService)
+
+        public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
 
-        [HttpPost("Create Category")]
-
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] CategoryCreateModel model)
         {
             var result = await _categoryService.CreateCategory(model);
@@ -24,7 +25,7 @@ namespace RestaurantApp.API.Controllers
             return Ok(ApiResult<CategoryResponceModel>.Success(result));
         }
 
-        [HttpGet("Get All Category")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await _categoryService.GetAllAsync();
@@ -32,16 +33,16 @@ namespace RestaurantApp.API.Controllers
             return Ok(result);
         }
 
-        [HttpPut("Update Category")]
-        public async Task<IActionResult>Update(int id, [FromForm] CategoryUpdateModel model)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromForm] CategoryUpdateModel model)
         {
             var result = await _categoryService.UpdateAsync(id, model);
 
             return Ok(result);
         }
 
-        [HttpDelete("Delete Category")]
-        public async Task<IActionResult>Delete([FromQuery] CategoryDeleteModel model)
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromQuery] CategoryDeleteModel model)
         {
             var result = await _categoryService.DeleteAsync(model);
 

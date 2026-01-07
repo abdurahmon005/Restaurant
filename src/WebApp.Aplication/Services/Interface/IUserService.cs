@@ -5,19 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using WebApp.Aplication.Models;
 using WebApp.Aplication.Models.Users;
+using WebApp.Domain.Enums;
 
 
 namespace WebApp.Aplication.Services.Interface
 {
     public interface IUserService
     {
-        int Create(CreateUserModel createUserModel);
-        LoginResponceModel LoginAsync(LoginUserModel loginUserModel);
-        PaginationResult<UserListResponceModel> GetAll(PaginationOption model);
-        UserResponseModel GetUser(int id);
-        Task<ApiResult<string>> VerifyOtpAsync(OtpVerificationModel model);
-        Task<ApiResult<string>> RegisterAsync(string fullname, string email, string password, bool isAdminSite);
-        Task<ApiResult<string>> SentResetPasswordAsync(string email);
-        Task<ApiResult<string>> ForgetPasswordAsync(string email,string newPassword, int otpCode);
+        ResponseModel<UserAuthResponseDTO> Register(UserRegistrDTO registrDto);
+        ResponseModel<UserAuthResponseDTO> RegisterByTelegram(UserRegistrDTO registrDto, string otpCode);
+        ResponseModel<UserAuthResponseDTO> Login(UserLoginDTO loginDto);
+        ResponseModel<UserDTO> GetUserById(int userId);
+        ResponseModel<UserDTO> UpdateUser(int userId, UserUpdateDTO updateDto);
+        ResponseModel<bool> DeleteUser(int userId);
+        ResponseModel<IEnumerable<UserDTO>> GetAllUsers();
+        ResponseModel<bool> ChangePassword(int userId, ChangePassword changePasswordDto);
+        ResponseModel<string> ResetPassword(ResetPassword resetPasswordDto);
+        ResponseModel<string> VerifyOtp(OtpVerificationModel model);
+        ResponseModel<bool> ChangeUserRole(int userId, RoleType newRole);
     }
 }

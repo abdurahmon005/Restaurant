@@ -9,7 +9,6 @@ namespace WebApp.Domain.Enums
     public enum RoleType
     {
         Admin = 1,
-        Waiter = 2,
-        Customer = 3,
+        Waiter = 2
     }
 }

@@ -20,17 +20,27 @@ namespace RestaurantProject.API.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> CreateTable(TableCreateModel model)
         {
-            var table = await _tableService.CreateTableAsync(model);
-
-            return Ok("Table Created");
+            try
+            {
+                var table = await _tableService.CreateTableAsync(model);
+                return Ok(table);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Xatolik yuz berdi: " + ex.Message });
+            }
         }
 
 
         [HttpGet("Get All")]
         public async Task<IActionResult> GetAllTables()
         {
-            var table = await _tableService.GetTableAsync();
-            return Ok(table);
+            var tables = await _tableService.GetAllTablesAsync();
+            return Ok(tables);
         }
 
 
@@ -58,6 +68,24 @@ namespace RestaurantProject.API.Controllers
             }
 
             return Ok(table);
+        }
+
+        [HttpPut("Update")]
+        public async Task<IActionResult> UpdateTable(int id, TableCreateModel model)
+        {
+            try
+            {
+                var table = await _tableService.UpdateAsync(id, model);
+                if (table == null)
+                {
+                    return NotFound(new { message = "Stol topilmadi" });
+                }
+                return Ok(table);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Xatolik yuz berdi: " + ex.Message });
+            }
         }
 
     }
