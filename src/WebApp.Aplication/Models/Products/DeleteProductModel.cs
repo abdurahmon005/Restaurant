@@ -9,7 +9,5 @@ namespace WebApp.Aplication.Models.Products
     public class DeleteProductModel
     {
         public int id { get; set; }
-        
     }
 }
-

@@ -28,6 +28,7 @@ namespace WebApp.DataAccess.Persistence
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TempUser> TempUsers { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Employees> Employees { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

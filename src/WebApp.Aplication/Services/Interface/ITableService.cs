@@ -13,5 +13,6 @@ namespace WebApp.Aplication.Services.Interface
         public Task<List<TableResponceModel>> GetAllTablesAsync();
         public Task<TableResponceModel?> GetByIdAsync(int id);
         public Task<bool> Delete(int id);
+        public Task<TableResponceModel?> UpdateAsync(int id, TableCreateModel model);
     }
 }

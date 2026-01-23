@@ -70,5 +70,23 @@ namespace RestaurantProject.API.Controllers
             return Ok(table);
         }
 
+        [HttpPut("Update")]
+        public async Task<IActionResult> UpdateTable(int id, TableCreateModel model)
+        {
+            try
+            {
+                var table = await _tableService.UpdateAsync(id, model);
+                if (table == null)
+                {
+                    return NotFound(new { message = "Stol topilmadi" });
+                }
+                return Ok(table);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Xatolik yuz berdi: " + ex.Message });
+            }
+        }
+
     }
 }

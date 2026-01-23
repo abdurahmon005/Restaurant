@@ -3,6 +3,7 @@ using WebApp.Aplication.Models.Tables;
 using WebApp.Aplication.Services.Interface;
 using WebApp.DataAccess.Persistence;
 using WebApp.Domain.Entities;
+using WebApp.Domain.Enums;
 
 namespace WebApp.Aplication.Services.Impl
 {
@@ -49,6 +50,30 @@ namespace WebApp.Aplication.Services.Impl
             var table = await _db.Tables.FindAsync(id);
             if (table == null) return false;
 
+
+            var relatedOrders = await _db.Orders
+                .Include(o => o.OrderDetails)
+                .Include(o => o.Payments)
+                .Where(o => o.TableId == id)
+                .ToListAsync();
+
+            foreach (var order in relatedOrders)
+            {
+                if (order.OrderDetails.Any())
+                {
+                    _db.OrdersDetails.RemoveRange(order.OrderDetails);
+                }
+                if (order.Payments.Any())
+                {
+                    _db.Payments.RemoveRange(order.Payments);
+                }
+            }
+
+            if (relatedOrders.Any())
+            {
+                _db.Orders.RemoveRange(relatedOrders);
+            }
+
             _db.Tables.Remove(table);
             await _db.SaveChangesAsync();
 
@@ -82,6 +107,36 @@ namespace WebApp.Aplication.Services.Impl
                 Status = p.Status.ToString().ToLower(),
                 Section = p.Section
             }).ToList();
+        }
+
+        public async Task<TableResponceModel?> UpdateAsync(int id, TableCreateModel model)
+        {
+            var table = await _db.Tables.FindAsync(id);
+            if (table == null) return null;
+
+            table.TableNumber = model.TableNumber;
+            table.Capacity = model.Capacity;
+            table.Section = model.Section;
+
+            // Update table status if provided
+            if (!string.IsNullOrEmpty(model.TableStatus))
+            {
+                if (Enum.TryParse<TableStatus>(model.TableStatus, true, out var status))
+                {
+                    table.Status = status;
+                }
+            }
+
+            await _db.SaveChangesAsync();
+
+            return new TableResponceModel
+            {
+                Id = table.Id,
+                TableNumber = table.TableNumber,
+                Capacity = table.Capacity,
+                Status = table.Status.ToString().ToLower(),
+                Section = table.Section
+            };
         }
     }
 }

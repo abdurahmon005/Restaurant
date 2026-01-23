@@ -69,7 +69,7 @@ namespace WebAPI
             builder.Services.Configure<EmailConfiguration>(configuration.GetSection("EmailConfiguration"));
             builder.Services.Configure<MinioSettings>(configuration.GetSection("MinioSettings"));
 
-            // ���� �������
+            // Service Dependecy Injection
             builder.Services.AddScoped<IFileStorageService, MinioFileStorageService>();
             builder.Services.AddScoped<ITableService, TableService>();
             builder.Services.AddScoped<IUserService, UserService>();
@@ -79,11 +79,14 @@ namespace WebAPI
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IWaiterOrderService, WaiterOrderService>();
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<Helper>();
             builder.Services.AddScoped<PasswordHash>();
             builder.Services.AddScoped<JwtService>();
 
-            // ���������� - ����� �����������
+            // User 
             builder.Services.AddScoped<IValidator<UserRegistrDTO>, UserRegistrDTOValidator>();
             builder.Services.AddScoped<IValidator<UserUpdateDTO>, UserUpdateDTOValidator>();
             builder.Services.AddScoped<IValidator<ChangePassword>, ChangePasswordValidator>();
@@ -159,11 +162,7 @@ namespace WebAPI
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // MINIMAL API
-            app.MapGet("/hello", () => "salom dunyo").WithName("GetHello");
-            app.MapGet("/hello/{name}", (string name) => $"Salom {name} jigar")
-                .WithName("GetHelloWithName");
-
+            
             app.MapControllers();
 
             app.Run();

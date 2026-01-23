@@ -24,15 +24,40 @@ namespace WebApp.Aplication.Services.Impl
         }
 
         public async Task<ApiResult<string>> CreateAsync(CreateOrderModel model)
-        {
+        {            
+            var productIds = model.Items.Select(i => i.ProductId).ToList();
+            var products = await _appDbContext.Products
+                .Where(p => productIds.Contains(p.Id))
+                .ToDictionaryAsync(p => p.Id, p => p.BasePrice);
+
+            var orderDetails = new List<OrderDetails>();
+            decimal totalAmount = 0;
+
+            foreach (var item in model.Items)
+            {
+                if (products.TryGetValue(item.ProductId, out var unitPrice))
+                {
+                    var totalPrice = unitPrice * item.Quantity;
+                    totalAmount += totalPrice;
+
+                    orderDetails.Add(new OrderDetails
+                    {
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        UnitPrice = unitPrice,
+                        TotalPrice = totalPrice
+                    });
+                }
+            }
 
             var order = new Order
             {
-                TotalAmount = model.TotalAmount,
+                TotalAmount = totalAmount,
                 UserId = model.UserId,
                 TableId = model.TableId,
                 Status = model.Status,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                OrderDetails = orderDetails
             };
 
             await _appDbContext.Orders.AddAsync(order);

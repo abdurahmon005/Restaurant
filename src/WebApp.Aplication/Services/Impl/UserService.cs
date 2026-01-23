@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -149,7 +150,7 @@ namespace WebApp.Aplication.Services.Impl
 
         public ResponseModel<UserAuthResponseDTO> Login(UserLoginDTO loginDto)
         {
-            var user = _db.Users.FirstOrDefault(x => x.Email == loginDto.Email);
+            var user = _db.Users.Where(x => x.Email == loginDto.Email).Include(x=>x.UserRoles).ThenInclude(x=>x.Role).FirstOrDefault();
             if (user == null || !_helper.Verify(user.Password, loginDto.Password, user.Salt))
             {
                 return ResponseModel<UserAuthResponseDTO>.Fail("Login xatoligi", "Email yoki parol noto'g'ri kiritildi!");
