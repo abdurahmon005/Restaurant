@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebApp.Aplication.Models.Tables;
 using WebApp.Aplication.Services.Interface;
 using WebApp.DataAccess.Persistence;
@@ -50,7 +50,7 @@ namespace WebApp.Aplication.Services.Impl
             var table = await _db.Tables.FindAsync(id);
             if (table == null) return false;
 
-
+            // Delete related orders and their details first
             var relatedOrders = await _db.Orders
                 .Include(o => o.OrderDetails)
                 .Include(o => o.Payments)

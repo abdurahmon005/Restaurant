@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using WebApp.Aplication.Models.Categories;
 using WebApp.Aplication.Models.Employees;
 using WebApp.Aplication.Models.Order;
-using WebApp.Aplication.Models.Products;
-using WebApp.Aplication.Models.Tables;
 using WebApp.Aplication.Services.Interface;
 using WebApp.DataAccess.Persistence;
 using WebApp.Domain.Entities;
@@ -40,15 +38,14 @@ namespace WebApp.Aplication.Services.Impl
 
             return new EmployeeResponseModel
             {
+                Id = employees.Id,
                 FirstName = employees.FirstName,
                 LastName = employees.LastName,
                 PhoneNumber = employees.PhoneNumber,
                 Role = employees.Role
             };
-
         }
 
-        
         public async Task<bool> DeleteAsync(int id)
         {
             var employee = await _context.Employees.FindAsync(id);
@@ -65,22 +62,19 @@ namespace WebApp.Aplication.Services.Impl
 
         public async Task<List<EmployeeResponseModel>> GetAllAsync()
         {
-            var products = await _context.Employees
-                
-                .ToListAsync();
+            var employees = await _context.Employees.ToListAsync();
 
-            return products.Select(p => new EmployeeResponseModel
+            return employees.Select(p => new EmployeeResponseModel
             {
                 Id = p.Id,
-                 FirstName = p.FirstName,
-                  LastName= p.LastName,
-                   PhoneNumber = p.PhoneNumber,
-                    Role= p.Role
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                PhoneNumber = p.PhoneNumber,
+                Role = p.Role
             }).ToList();
-
         }
 
-        public async Task<EmployeeResponseModel> Update(int Id, CreateEmployeesDTO dto)
+        public async Task<EmployeeResponseModel> Update(int Id, UpdateEmployeeDTO dto)
         {
             var employee = await _context.Employees.FindAsync(Id);
             if (employee == null) return null;
@@ -89,10 +83,9 @@ namespace WebApp.Aplication.Services.Impl
             employee.LastName = dto.LastName;
             employee.PhoneNumber = dto.PhoneNumber;
             employee.Role = dto.Role;
+            employee.UpdatedAt = DateTime.UtcNow;
 
-
-            
-
+            _context.Employees.Update(employee);
             await _context.SaveChangesAsync();
 
             return new EmployeeResponseModel
@@ -101,10 +94,8 @@ namespace WebApp.Aplication.Services.Impl
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 PhoneNumber = employee.PhoneNumber,
-                Role = dto.Role   
+                Role = employee.Role
             };
         }
-
-        
     }
 }

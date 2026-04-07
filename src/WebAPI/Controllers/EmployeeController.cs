@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using WebApp.Aplication.Models;
 using WebApp.Aplication.Models.Categories;
 using WebApp.Aplication.Models.Employees;
@@ -12,11 +12,11 @@ namespace RestaurantApp.API.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
-        public EmployeeController( IEmployeeService employeeService) 
+        public EmployeeController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateEmployeesDTO model)
         {
@@ -39,12 +39,11 @@ namespace RestaurantApp.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _employeeService.GetAllAsync();
-
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromForm] CreateEmployeesDTO dto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateEmployeeDTO dto)
         {
             try
             {
@@ -61,17 +60,17 @@ namespace RestaurantApp.API.Controllers
             }
         }
 
-        [HttpDelete("Delete")]
-        public async Task<IActionResult> DeleteTable(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var table = await _employeeService.DeleteAsync(id);
+            var result = await _employeeService.DeleteAsync(id);
 
-            if (table == null)
+            if (!result)
             {
-                return NotFound();
+                return NotFound(new { message = "Employee topilmadi" });
             }
 
-            return Ok(table);
+            return Ok(new { message = "Employee muvaffaqiyatli o'chirildi" });
         }
     }
 }
