@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,7 @@ using WebApp.Aplication.Models.Order;
 using WebApp.Aplication.Services.Interface;
 using WebApp.DataAccess.Persistence;
 using WebApp.Domain.Entities;
+using WebApp.Domain.Enums;
 
 namespace WebApp.Aplication.Services.Impl
 {
@@ -28,7 +29,8 @@ namespace WebApp.Aplication.Services.Impl
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 PhoneNumber = dto.PhoneNumber,
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 Role = dto.Role
             };
             await _context.Employees.AddAsync(employees);
@@ -36,32 +38,35 @@ namespace WebApp.Aplication.Services.Impl
 
             return new EmployeeResponseModel
             {
+                Id = employees.Id,
                 FirstName = employees.FirstName,
                 LastName = employees.LastName,
                 PhoneNumber = employees.PhoneNumber,
                 Role = employees.Role
             };
-
         }
 
-        public async Task<bool> Delete(int id, DeleteEmployeeDTO dto)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var result = await _context.Employees.FindAsync(id);
-            if (result == null)
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null)
             {
                 return false;
             }
-            _context.Employees.Remove(result);
+
+            _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
+
             return true;
         }
 
-        public async Task<List<EmployeeResponseModel>> GetAll()
+        public async Task<List<EmployeeResponseModel>> GetAllAsync()
         {
-            var result = await _context.Employees.ToListAsync();
+            var employees = await _context.Employees.ToListAsync();
 
-            return result.Select(p => new EmployeeResponseModel
+            return employees.Select(p => new EmployeeResponseModel
             {
+                Id = p.Id,
                 FirstName = p.FirstName,
                 LastName = p.LastName,
                 PhoneNumber = p.PhoneNumber,
@@ -71,30 +76,26 @@ namespace WebApp.Aplication.Services.Impl
 
         public async Task<EmployeeResponseModel> Update(int Id, UpdateEmployeeDTO dto)
         {
-            var result = await _context.Employees.FindAsync(Id);
+            var employee = await _context.Employees.FindAsync(Id);
+            if (employee == null) return null;
 
-            if (result == null)
-            {
-                throw new Exception("Category not found");
-            }
+            employee.FirstName = dto.FirstName;
+            employee.LastName = dto.LastName;
+            employee.PhoneNumber = dto.PhoneNumber;
+            employee.Role = dto.Role;
+            employee.UpdatedAt = DateTime.UtcNow;
 
-            result.FirstName = dto.FirstName;
-            result.LastName = dto.LastName;
-            result.PhoneNumber = dto.PhoneNumber;
-            result.Role = dto.Role;
-
-
-            _context.Employees.Update(result);
+            _context.Employees.Update(employee);
             await _context.SaveChangesAsync();
+
             return new EmployeeResponseModel
             {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                PhoneNumber = dto.PhoneNumber,
-                Role = dto.Role
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                PhoneNumber = employee.PhoneNumber,
+                Role = employee.Role
             };
         }
-
-       
     }
 }

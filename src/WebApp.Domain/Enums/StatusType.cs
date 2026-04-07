@@ -10,5 +10,6 @@ namespace WebApp.Domain.Enums
     {
         Closed = 1,
         Active = 2,
+        InProcess = 3   
     }
 }

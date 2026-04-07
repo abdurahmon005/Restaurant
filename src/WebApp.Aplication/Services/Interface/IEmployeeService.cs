@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +10,11 @@ using WebApp.Domain.Entities;
 
 namespace WebApp.Aplication.Services.Interface
 {
-        public interface IEmployeeService
-        {
-            Task<EmployeeResponseModel> CreateAsync(CreateEmployeesDTO dto);
-            Task<EmployeeResponseModel> Update(int Id, UpdateEmployeeDTO dto);
-            Task<List<EmployeeResponseModel>> GetAll();
-            Task<bool> Delete(int id, DeleteEmployeeDTO dto);
-        }
+    public interface IEmployeeService
+    {
+        Task<EmployeeResponseModel> CreateAsync(CreateEmployeesDTO dto);
+        Task<EmployeeResponseModel> Update(int Id, UpdateEmployeeDTO dto);
+        Task<List<EmployeeResponseModel>> GetAllAsync();
+        Task<bool> DeleteAsync(int id);
+    }
 }

@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebApp.Aplication.Models.Tables;
 using WebApp.Aplication.Services.Interface;
 using WebApp.DataAccess.Persistence;
 using WebApp.Domain.Entities;
+using WebApp.Domain.Enums;
 
 namespace WebApp.Aplication.Services.Impl
 {
@@ -116,6 +117,15 @@ namespace WebApp.Aplication.Services.Impl
             table.TableNumber = model.TableNumber;
             table.Capacity = model.Capacity;
             table.Section = model.Section;
+
+            // Update table status if provided
+            if (!string.IsNullOrEmpty(model.TableStatus))
+            {
+                if (Enum.TryParse<TableStatus>(model.TableStatus, true, out var status))
+                {
+                    table.Status = status;
+                }
+            }
 
             await _db.SaveChangesAsync();
 

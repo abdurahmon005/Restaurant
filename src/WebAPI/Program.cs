@@ -80,7 +80,8 @@ namespace WebAPI
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Services.AddScoped<IReservationService, ReservationService>();
-            //builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<IWaiterOrderService, WaiterOrderService>();
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<Helper>();
             builder.Services.AddScoped<PasswordHash>();
             builder.Services.AddScoped<JwtService>();

@@ -27,7 +27,7 @@ namespace WebApp.Aplication.Services.Impl
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.Role, user.Role),
+            new Claim(ClaimTypes.Role, user.UserRoles.First().Role.Name),
             new Claim("Phone", user.PhoneNumber)
             };
 
